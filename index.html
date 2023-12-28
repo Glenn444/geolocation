@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Current Location</title>
+</head>
+<body>
+
+  <h1>Get Current Location</h1>
+
+  <button onclick="getCurrentLocation()">Get Location</button>
+  <button onclick="shareLocation()">Share Location</button>
+
+  <script>
+    let userLocation = null;
+
+    function getCurrentLocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            userLocation = { latitude, longitude };
+
+            alert(`Latitude: ${latitude}\nLongitude: ${longitude}`);
+          },
+          (error) => {
+            console.error('Error getting current location:', error.message);
+            alert('Error getting current location. Please make sure location services are enabled.');
+          }
+        );
+      } else {
+        alert('Geolocation is not supported in your browser.');
+      }
+    }
+
+    function shareLocation() {
+      if (userLocation) {
+        const shareText = `Checkout my location: https://www.google.com/maps?q=${userLocation.latitude},${userLocation.longitude}`;
+        navigator.clipboard.writeText(shareText)
+          .then(() => alert('Location link copied to clipboard!'))
+          .catch((error) => console.error('Error copying to clipboard:', error));
+      } else {
+        alert('Location not available. Please get your location first.');
+      }
+    }
+  </script>
+
+</body>
+</html>
